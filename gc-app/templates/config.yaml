@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bdd-config
+data:
+  schema: gc
+
+
+# kubectl create secret generic db-secret --from-literal=username=root --from-literal=password='pass'

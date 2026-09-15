@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+spec:
+  selector:
+    matchLabels:
+      fr.orsys/app: api
+      fr.orsys/env: staging
+  template:
+    metadata:
+      labels:
+        fr.orsys/app: api
+        fr.orsys/env: staging
+    spec:
+      containers:
+      - name: java
+        image: dumontcyril/gc-api:1.0
+        env:
+          - name: SERVER_PORT
+            value: "8080"
+          - name: APP_BDD_HOST
+            value: postgres
+          - name: APP_BDD_DATABASE
+            valueFrom:
+              configMapKeyRef:
+                key: schema
+                name: bdd-config
+          - name: SPRING_DATASOURCE_USERNAME
+            value: user
+          - name: SPRING_DATASOURCE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: db-secret
+        ports:
+        - containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+spec:
+  selector:
+    fr.orsys/app: api
+    fr.orsys/env: staging
+  ports:
+  - port: 80
+    targetPort: 8080
+
