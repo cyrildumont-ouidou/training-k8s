@@ -20,6 +20,13 @@ spec:
       containers:
       - name: postgres
         image: postgres:17
+        readinessProbe:
+          initialDelaySeconds: 5
+          exec:
+            command: 
+               - sh 
+               - -c  
+               - 'pg_isready -d $POSTGRES_DB -U $POSTGRES_USER'
         volumeMounts:
           - mountPath: /var/lib/postgresql/data
             name: data
