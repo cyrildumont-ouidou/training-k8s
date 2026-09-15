@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-http
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      orsys.fr/app: http
+  template:
+    metadata:
+      name: web
+      labels:
+        orsys.fr/app: http
+    spec:
+      containers:
+      - name: serveur
+        #image: nginx:1.17.4-alpine
+        image: httpd:2.4
+        ports:
+          - containerPort: 80
